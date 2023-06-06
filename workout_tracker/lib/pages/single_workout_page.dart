@@ -86,6 +86,7 @@ class SingleWorkoutPage extends StatelessWidget {
                     height: 5,
                   ),
                   MyTextField(
+                    keyboardType: TextInputType.number,
                     hintText: 'Kg',
                     obscureText: false,
                     prefixIcon: null,
@@ -96,6 +97,7 @@ class SingleWorkoutPage extends StatelessWidget {
                     height: 5,
                   ),
                   MyTextField(
+                    keyboardType: TextInputType.number,
                     hintText: 'Serie',
                     obscureText: false,
                     prefixIcon: null,
@@ -106,6 +108,7 @@ class SingleWorkoutPage extends StatelessWidget {
                     height: 5,
                   ),
                   MyTextField(
+                    keyboardType: TextInputType.number,
                     hintText: 'Ripetizioni',
                     obscureText: false,
                     prefixIcon: null,
@@ -116,6 +119,7 @@ class SingleWorkoutPage extends StatelessWidget {
                     height: 5,
                   ),
                   MyTextField(
+                    keyboardType: TextInputType.number,
                     hintText: 'Recupero',
                     obscureText: false,
                     prefixIcon: null,
@@ -141,10 +145,10 @@ class SingleWorkoutPage extends StatelessWidget {
                       user.email.toString(),
                       workoutName,
                       _exerciseController.text,
-                      _kgController.text,
-                      _setsController.text,
-                      _repsController.text,
-                      _restController.text,
+                      int.parse(_kgController.text),
+                      int.parse(_setsController.text),
+                      int.parse(_repsController.text),
+                      int.parse(_restController.text),
                     );
                     _exerciseController.clear();
                     _kgController.clear();
@@ -163,10 +167,11 @@ class SingleWorkoutPage extends StatelessWidget {
             ),
           );
         },
-        backgroundColor: MyTheme().primaryColor,
-        child: const Icon(
+        backgroundColor: MyTheme().detailsColor,
+        child: Icon(
           Icons.add,
           size: 35,
+          color: MyTheme().primaryColor,
         ),
       ),
     );

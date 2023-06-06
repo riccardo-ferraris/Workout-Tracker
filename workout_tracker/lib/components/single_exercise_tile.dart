@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:workout_tracker/firestore_helper.dart';
+import 'package:workout_tracker/pages/timer.dart';
 import '../theme.dart';
 import 'my_text_field.dart';
 
@@ -18,10 +19,10 @@ class SingleExercise extends StatefulWidget {
   });
 
   final String name;
-  final String kg;
-  final String sets;
-  final String reps;
-  final String rest;
+  final int kg;
+  final int sets;
+  final int reps;
+  final int rest;
   final String workoutName;
   final dynamic timestamp;
   final user = FirebaseAuth.instance.currentUser!;
@@ -51,6 +52,23 @@ class _SingleExerciseState extends State<SingleExercise> {
           borderSide: BorderSide(color: MyTheme().secondaryColor),
         ),
         child: Slidable(
+          startActionPane: ActionPane(
+            motion: const ScrollMotion(),
+            children: [
+              SlidableAction(
+                  icon: Icons.timer,
+                  backgroundColor: Colors.green,
+                  onPressed: (context) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => MyTimer(
+                          time: int.parse(widget.rest.toString()) * 60,
+                        ),
+                      ),
+                    );
+                  })
+            ],
+          ),
           endActionPane: ActionPane(motion: const ScrollMotion(), children: [
             SlidableAction(
               icon: Icons.settings,
@@ -73,6 +91,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                           height: 5,
                         ),
                         MyTextField(
+                          keyboardType: TextInputType.number,
                           hintText: 'Kg',
                           obscureText: false,
                           prefixIcon: null,
@@ -83,6 +102,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                           height: 5,
                         ),
                         MyTextField(
+                          keyboardType: TextInputType.number,
                           hintText: 'Serie',
                           obscureText: false,
                           prefixIcon: null,
@@ -93,6 +113,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                           height: 5,
                         ),
                         MyTextField(
+                          keyboardType: TextInputType.number,
                           hintText: 'Ripetizioni',
                           obscureText: false,
                           prefixIcon: null,
@@ -103,6 +124,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                           height: 5,
                         ),
                         MyTextField(
+                          keyboardType: TextInputType.number,
                           hintText: 'Recupero',
                           obscureText: false,
                           prefixIcon: null,
@@ -119,7 +141,9 @@ class _SingleExerciseState extends State<SingleExercise> {
                         child: Text(
                           'Chiudi',
                           style: TextStyle(
-                              color: MyTheme().detailsColor, fontSize: 18),
+                            color: MyTheme().detailsColor,
+                            fontSize: 18,
+                          ),
                         ),
                       ),
                       TextButton(
@@ -129,10 +153,10 @@ class _SingleExerciseState extends State<SingleExercise> {
                             widget.workoutName,
                             widget.name,
                             widget._exerciseController.text,
-                            widget._kgController.text,
-                            widget._setsController.text,
-                            widget._repsController.text,
-                            widget._restController.text,
+                            int.parse(widget._kgController.text),
+                            int.parse(widget._setsController.text),
+                            int.parse(widget._repsController.text),
+                            int.parse(widget._restController.text),
                             widget.timestamp,
                           );
 
@@ -176,7 +200,7 @@ class _SingleExerciseState extends State<SingleExercise> {
             ),
             subtitle: Wrap(
               children: [
-                if (widget.kg != '')
+                if (widget.kg.toString() != '')
                   Chip(
                     label: Text('${widget.kg}kg'),
                     backgroundColor: MyTheme().terziaryColor,
@@ -184,7 +208,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                 const SizedBox(
                   width: 5,
                 ),
-                if (widget.sets != '')
+                if (widget.sets.toString() != '')
                   Chip(
                     label: Text('${widget.sets} sets'),
                     backgroundColor: MyTheme().terziaryColor,
@@ -192,7 +216,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                 const SizedBox(
                   width: 5,
                 ),
-                if (widget.reps != '')
+                if (widget.reps.toString() != '')
                   Chip(
                     label: Text('${widget.reps} reps'),
                     backgroundColor: MyTheme().terziaryColor,
@@ -200,7 +224,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                 const SizedBox(
                   width: 5,
                 ),
-                if (widget.rest != '')
+                if (widget.rest.toString() != '')
                   Chip(
                     label: Text('${widget.rest} mins'),
                     backgroundColor: MyTheme().terziaryColor,

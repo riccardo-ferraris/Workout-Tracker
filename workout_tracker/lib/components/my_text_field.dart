@@ -8,6 +8,7 @@ class MyTextField extends StatelessWidget {
   final bool obscureText;
   final dynamic prefixIcon;
   final dynamic suffixIcon;
+  final TextInputType? keyboardType;
   const MyTextField({
     super.key,
     required this.controller,
@@ -15,11 +16,13 @@ class MyTextField extends StatelessWidget {
     required this.obscureText,
     required this.prefixIcon,
     required this.suffixIcon,
+    this.keyboardType,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: keyboardType,
       controller: controller,
       obscureText: obscureText ? true : false,
       decoration: InputDecoration(

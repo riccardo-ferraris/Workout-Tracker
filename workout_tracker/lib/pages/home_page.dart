@@ -67,10 +67,11 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ));
         },
-        backgroundColor: MyTheme().primaryColor,
-        child: const Icon(
+        backgroundColor: MyTheme().detailsColor,
+        child: Icon(
           Icons.add,
           size: 35,
+          color: MyTheme().primaryColor,
         ),
       ),
       body: StreamBuilder<List<DocumentSnapshot>>(

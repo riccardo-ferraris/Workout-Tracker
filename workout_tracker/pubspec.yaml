@@ -39,6 +39,7 @@ dependencies:
   firebase_auth: ^4.6.1
   cloud_firestore: ^4.7.1
   flutter_slidable: ^3.0.0
+  circular_countdown_timer: ^0.2.3
 
 dev_dependencies:
   flutter_test:

@@ -14,10 +14,10 @@ class FirestoreHelper {
     String email,
     String workoutName,
     String exerciseName,
-    String kg,
-    String sets,
-    String reps,
-    String rest,
+    int kg,
+    int sets,
+    int reps,
+    int rest,
   ) async {
     FirebaseFirestore.instance
         .collection('Users')
@@ -87,10 +87,10 @@ class FirestoreHelper {
     String workoutName,
     String exerciseName,
     String newExerciseName,
-    String kg,
-    String sets,
-    String reps,
-    String rest,
+    int kg,
+    int sets,
+    int reps,
+    int rest,
     timestamp,
   ) async {
     deleteExercise(email, workoutName, exerciseName);
@@ -118,10 +118,10 @@ class FirestoreHelper {
     String email,
     String workoutName,
     String exerciseName,
-    String kg,
-    String sets,
-    String reps,
-    String rest,
+    int kg,
+    int sets,
+    int reps,
+    int rest,
     timestamp,
     bool isCompleted,
   ) async {
