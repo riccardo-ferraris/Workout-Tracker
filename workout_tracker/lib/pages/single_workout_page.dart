@@ -145,10 +145,10 @@ class SingleWorkoutPage extends StatelessWidget {
                       user.email.toString(),
                       workoutName,
                       _exerciseController.text,
-                      int.parse(_kgController.text),
-                      int.parse(_setsController.text),
-                      int.parse(_repsController.text),
-                      int.parse(_restController.text),
+                      double.parse(_kgController.text),
+                      double.parse(_setsController.text),
+                      double.parse(_repsController.text),
+                      double.parse(_restController.text),
                     );
                     _exerciseController.clear();
                     _kgController.clear();

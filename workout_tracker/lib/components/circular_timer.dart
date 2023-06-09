@@ -10,7 +10,7 @@ class MyCircularTimer extends StatefulWidget {
     required this.countdownController,
   });
 
-  final int time;
+  final double time;
   final CountDownController countdownController;
 
   @override
@@ -23,7 +23,7 @@ class _MyCircularTimerState extends State<MyCircularTimer> {
     return CircularCountDownTimer(
       width: MediaQuery.of(context).size.width / 2,
       height: MediaQuery.of(context).size.height / 3,
-      duration: widget.time,
+      duration: widget.time.toInt(),
       fillColor: MyTheme().terziaryColor,
       ringColor: MyTheme().primaryColor,
       isReverse: true,

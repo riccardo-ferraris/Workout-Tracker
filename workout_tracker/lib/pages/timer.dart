@@ -9,7 +9,7 @@ import 'package:workout_tracker/theme.dart';
 class MyTimer extends StatefulWidget {
   const MyTimer({super.key, required this.time});
 
-  final int time;
+  final double time;
 
   @override
   State<MyTimer> createState() => _MyTimerState();

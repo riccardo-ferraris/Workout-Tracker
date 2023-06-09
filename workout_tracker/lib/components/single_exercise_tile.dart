@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:workout_tracker/firestore_helper.dart';
-import 'package:workout_tracker/pages/single_exercise_page.dart';
 import 'package:workout_tracker/pages/timer.dart';
 import '../theme.dart';
 import 'my_text_field.dart';
@@ -20,10 +19,10 @@ class SingleExercise extends StatefulWidget {
   });
 
   final String name;
-  final int kg;
-  final int sets;
-  final int reps;
-  final int rest;
+  final double kg;
+  final double sets;
+  final double reps;
+  final double rest;
   final String workoutName;
   final dynamic timestamp;
   final user = FirebaseAuth.instance.currentUser!;
@@ -63,7 +62,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => MyTimer(
-                          time: int.parse(widget.rest.toString()) * 60,
+                          time: double.parse(widget.rest.toString()) * 60,
                         ),
                       ),
                     );
@@ -93,7 +92,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                         ),
                         MyTextField(
                           keyboardType: TextInputType.number,
-                          hintText: '${widget.kg.toString()}kg',
+                          hintText: '${widget.kg.toInt().toString()}kg',
                           obscureText: false,
                           prefixIcon: null,
                           suffixIcon: null,
@@ -104,7 +103,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                         ),
                         MyTextField(
                           keyboardType: TextInputType.number,
-                          hintText: '${widget.sets.toString()} sets',
+                          hintText: '${widget.sets.toInt().toString()} sets',
                           obscureText: false,
                           prefixIcon: null,
                           suffixIcon: null,
@@ -115,7 +114,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                         ),
                         MyTextField(
                           keyboardType: TextInputType.number,
-                          hintText: '${widget.reps.toString()} reps',
+                          hintText: '${widget.reps.toInt().toString()} reps',
                           obscureText: false,
                           prefixIcon: null,
                           suffixIcon: null,
@@ -126,7 +125,9 @@ class _SingleExerciseState extends State<SingleExercise> {
                         ),
                         MyTextField(
                           keyboardType: TextInputType.number,
-                          hintText: '${widget.rest.toString()} mins',
+                          hintText: widget.rest.toString().endsWith('.0')
+                              ? '${widget.rest.toInt().toString()} mins'
+                              : '${widget.rest.toString()} mins',
                           obscureText: false,
                           prefixIcon: null,
                           suffixIcon: null,
@@ -154,10 +155,10 @@ class _SingleExerciseState extends State<SingleExercise> {
                             widget.workoutName,
                             widget.name,
                             widget._exerciseController.text,
-                            int.parse(widget._kgController.text),
-                            int.parse(widget._setsController.text),
-                            int.parse(widget._repsController.text),
-                            int.parse(widget._restController.text),
+                            double.parse(widget._kgController.text),
+                            double.parse(widget._setsController.text),
+                            double.parse(widget._repsController.text),
+                            double.parse(widget._restController.text),
                             widget.timestamp,
                           );
 
@@ -203,7 +204,7 @@ class _SingleExerciseState extends State<SingleExercise> {
               children: [
                 if (widget.kg.toString() != '')
                   Chip(
-                    label: Text('${widget.kg}kg'),
+                    label: Text('${widget.kg.toInt()}kg'),
                     backgroundColor: MyTheme().terziaryColor,
                   ),
                 const SizedBox(
@@ -211,7 +212,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                 ),
                 if (widget.sets.toString() != '')
                   Chip(
-                    label: Text('${widget.sets} sets'),
+                    label: Text('${widget.sets.toInt()} sets'),
                     backgroundColor: MyTheme().terziaryColor,
                   ),
                 const SizedBox(
@@ -219,54 +220,45 @@ class _SingleExerciseState extends State<SingleExercise> {
                 ),
                 if (widget.reps.toString() != '')
                   Chip(
-                    label: Text('${widget.reps} reps'),
+                    label: Text('${widget.reps.toInt()} reps'),
                     backgroundColor: MyTheme().terziaryColor,
                   ),
                 const SizedBox(
                   width: 5,
                 ),
-                if (widget.rest.toString() != '')
+                if (widget.rest.toString() != '' &&
+                    widget.rest.toString().endsWith('.0'))
+                  Chip(
+                    label: Text('${widget.rest.toInt()} mins'),
+                    backgroundColor: MyTheme().terziaryColor,
+                  )
+                else
                   Chip(
                     label: Text('${widget.rest} mins'),
                     backgroundColor: MyTheme().terziaryColor,
                   ),
               ],
             ),
-            // trailing: Checkbox(
-            //     checkColor: MyTheme().detailsColor,
-            //     activeColor: Colors.green,
-            //     value: isChecked,
-            //     onChanged: (newValue) {
-            //       setState(() {
-            //         isChecked = newValue;
-            //       });
-            //       FirestoreHelper().modifyIsCompleted(
-            //         widget.user.email.toString(),
-            //         widget.workoutName,
-            //         widget.name,
-            //         widget.kg,
-            //         widget.sets,
-            //         widget.reps,
-            //         widget.rest,
-            //         widget.timestamp,
-            //         isChecked!,
-            //       );
-            //     }),
-            trailing: SizedBox(
-              height: double.infinity,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => SingleExercisePage(
-                        exerciseName: widget.name,
-                      ),
-                    ),
+            trailing: Checkbox(
+                checkColor: MyTheme().detailsColor,
+                activeColor: Colors.green,
+                value: isChecked,
+                onChanged: (newValue) {
+                  setState(() {
+                    isChecked = newValue;
+                  });
+                  FirestoreHelper().modifyIsCompleted(
+                    widget.user.email.toString(),
+                    widget.workoutName,
+                    widget.name,
+                    widget.kg,
+                    widget.sets,
+                    widget.reps,
+                    widget.rest,
+                    widget.timestamp,
+                    isChecked!,
                   );
-                },
-                child: const Icon(Icons.arrow_forward_ios),
-              ),
-            ),
+                }),
             textColor: MyTheme().detailsColor,
             tileColor: MyTheme().primaryColor,
             iconColor: MyTheme().detailsColor,
