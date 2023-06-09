@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:workout_tracker/firestore_helper.dart';
+import 'package:workout_tracker/pages/single_exercise_page.dart';
 import 'package:workout_tracker/pages/timer.dart';
 import '../theme.dart';
 import 'my_text_field.dart';
@@ -81,7 +82,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         MyTextField(
-                          hintText: 'Nome esercizio',
+                          hintText: widget.name,
                           obscureText: false,
                           prefixIcon: null,
                           suffixIcon: null,
@@ -92,7 +93,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                         ),
                         MyTextField(
                           keyboardType: TextInputType.number,
-                          hintText: 'Kg',
+                          hintText: '${widget.kg.toString()}kg',
                           obscureText: false,
                           prefixIcon: null,
                           suffixIcon: null,
@@ -103,7 +104,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                         ),
                         MyTextField(
                           keyboardType: TextInputType.number,
-                          hintText: 'Serie',
+                          hintText: '${widget.sets.toString()} sets',
                           obscureText: false,
                           prefixIcon: null,
                           suffixIcon: null,
@@ -114,7 +115,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                         ),
                         MyTextField(
                           keyboardType: TextInputType.number,
-                          hintText: 'Ripetizioni',
+                          hintText: '${widget.reps.toString()} reps',
                           obscureText: false,
                           prefixIcon: null,
                           suffixIcon: null,
@@ -125,7 +126,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                         ),
                         MyTextField(
                           keyboardType: TextInputType.number,
-                          hintText: 'Recupero',
+                          hintText: '${widget.rest.toString()} mins',
                           obscureText: false,
                           prefixIcon: null,
                           suffixIcon: null,
@@ -231,28 +232,44 @@ class _SingleExerciseState extends State<SingleExercise> {
                   ),
               ],
             ),
-            trailing: Checkbox(
-                checkColor: MyTheme().detailsColor,
-                activeColor: Colors.green,
-                value: isChecked,
-                onChanged: (newValue) {
-                  setState(() {
-                    isChecked = newValue;
-                  });
-                  FirestoreHelper().modifyIsCompleted(
-                    widget.user.email.toString(),
-                    widget.workoutName,
-                    widget.name,
-                    widget.kg,
-                    widget.sets,
-                    widget.reps,
-                    widget.rest,
-                    widget.timestamp,
-                    isChecked!,
+            // trailing: Checkbox(
+            //     checkColor: MyTheme().detailsColor,
+            //     activeColor: Colors.green,
+            //     value: isChecked,
+            //     onChanged: (newValue) {
+            //       setState(() {
+            //         isChecked = newValue;
+            //       });
+            //       FirestoreHelper().modifyIsCompleted(
+            //         widget.user.email.toString(),
+            //         widget.workoutName,
+            //         widget.name,
+            //         widget.kg,
+            //         widget.sets,
+            //         widget.reps,
+            //         widget.rest,
+            //         widget.timestamp,
+            //         isChecked!,
+            //       );
+            //     }),
+            trailing: SizedBox(
+              height: double.infinity,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SingleExercisePage(
+                        exerciseName: widget.name,
+                      ),
+                    ),
                   );
-                }),
+                },
+                child: const Icon(Icons.arrow_forward_ios),
+              ),
+            ),
             textColor: MyTheme().detailsColor,
             tileColor: MyTheme().primaryColor,
+            iconColor: MyTheme().detailsColor,
           ),
         ),
       ),
