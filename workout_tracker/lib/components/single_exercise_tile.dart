@@ -19,9 +19,9 @@ class SingleExercise extends StatefulWidget {
   });
 
   final String name;
-  final double kg;
-  final double sets;
-  final double reps;
+  final String kg;
+  final String sets;
+  final String reps;
   final double rest;
   final String workoutName;
   final dynamic timestamp;
@@ -92,7 +92,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                         ),
                         MyTextField(
                           keyboardType: TextInputType.number,
-                          hintText: '${widget.kg.toInt().toString()}kg',
+                          hintText: '${widget.kg}kg',
                           obscureText: false,
                           prefixIcon: null,
                           suffixIcon: null,
@@ -103,7 +103,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                         ),
                         MyTextField(
                           keyboardType: TextInputType.number,
-                          hintText: '${widget.sets.toInt().toString()} sets',
+                          hintText: '${widget.sets} sets',
                           obscureText: false,
                           prefixIcon: null,
                           suffixIcon: null,
@@ -114,7 +114,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                         ),
                         MyTextField(
                           keyboardType: TextInputType.number,
-                          hintText: '${widget.reps.toInt().toString()} reps',
+                          hintText: '${widget.reps} reps',
                           obscureText: false,
                           prefixIcon: null,
                           suffixIcon: null,
@@ -155,9 +155,9 @@ class _SingleExerciseState extends State<SingleExercise> {
                             widget.workoutName,
                             widget.name,
                             widget._exerciseController.text,
-                            double.parse(widget._kgController.text),
-                            double.parse(widget._setsController.text),
-                            double.parse(widget._repsController.text),
+                            widget._kgController.text,
+                            widget._setsController.text,
+                            widget._repsController.text,
                             double.parse(widget._restController.text),
                             widget.timestamp,
                           );
@@ -204,7 +204,7 @@ class _SingleExerciseState extends State<SingleExercise> {
               children: [
                 if (widget.kg.toString() != '')
                   Chip(
-                    label: Text('${widget.kg.toInt()}kg'),
+                    label: Text('${widget.kg}kg'),
                     backgroundColor: MyTheme().terziaryColor,
                   ),
                 const SizedBox(
@@ -212,7 +212,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                 ),
                 if (widget.sets.toString() != '')
                   Chip(
-                    label: Text('${widget.sets.toInt()} sets'),
+                    label: Text('${widget.sets} sets'),
                     backgroundColor: MyTheme().terziaryColor,
                   ),
                 const SizedBox(
@@ -220,7 +220,7 @@ class _SingleExerciseState extends State<SingleExercise> {
                 ),
                 if (widget.reps.toString() != '')
                   Chip(
-                    label: Text('${widget.reps.toInt()} reps'),
+                    label: Text('${widget.reps} reps'),
                     backgroundColor: MyTheme().terziaryColor,
                   ),
                 const SizedBox(
@@ -239,26 +239,6 @@ class _SingleExerciseState extends State<SingleExercise> {
                   ),
               ],
             ),
-            trailing: Checkbox(
-                checkColor: MyTheme().detailsColor,
-                activeColor: Colors.green,
-                value: isChecked,
-                onChanged: (newValue) {
-                  setState(() {
-                    isChecked = newValue;
-                  });
-                  FirestoreHelper().modifyIsCompleted(
-                    widget.user.email.toString(),
-                    widget.workoutName,
-                    widget.name,
-                    widget.kg,
-                    widget.sets,
-                    widget.reps,
-                    widget.rest,
-                    widget.timestamp,
-                    isChecked!,
-                  );
-                }),
             textColor: MyTheme().detailsColor,
             tileColor: MyTheme().primaryColor,
             iconColor: MyTheme().detailsColor,

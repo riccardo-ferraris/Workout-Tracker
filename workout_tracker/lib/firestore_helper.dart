@@ -14,9 +14,9 @@ class FirestoreHelper {
     String email,
     String workoutName,
     String exerciseName,
-    double kg,
-    double sets,
-    double reps,
+    String kg,
+    String sets,
+    String reps,
     double rest,
   ) async {
     FirebaseFirestore.instance
@@ -87,9 +87,9 @@ class FirestoreHelper {
     String workoutName,
     String exerciseName,
     String newExerciseName,
-    double kg,
-    double sets,
-    double reps,
+    String kg,
+    String sets,
+    String reps,
     double rest,
     timestamp,
   ) async {
@@ -113,46 +113,4 @@ class FirestoreHelper {
       },
     );
   }
-
-  Future modifyIsCompleted(
-    String email,
-    String workoutName,
-    String exerciseName,
-    double kg,
-    double sets,
-    double reps,
-    double rest,
-    timestamp,
-    bool isCompleted,
-  ) async {
-    FirebaseFirestore.instance
-        .collection('Users')
-        .doc(email)
-        .collection('Workouts')
-        .doc(workoutName)
-        .collection('Exercises')
-        .doc(exerciseName)
-        .set(
-      {
-        'Nome': exerciseName,
-        'Kg': kg,
-        'Sets': sets,
-        'Reps': reps,
-        'Rest': rest,
-        'isCompleted': isCompleted,
-        'timestamp': timestamp,
-      },
-    );
-  }
-
-  // static bool isCompleted(
-  //     String email, String workoutName, String exerciseName) {
-  //   FirebaseFirestore.instance
-  //       .collection('Users')
-  //       .doc(email)
-  //       .collection('Workouts')
-  //       .doc(workoutName)
-  //       .collection('Exercises')
-  //       .where('isCompleted', isEqualTo: 'true');
-  // }
 }
