@@ -31,7 +31,6 @@ class SingleExercise extends StatefulWidget {
   final TextEditingController _kgController = TextEditingController();
   final TextEditingController _repsController = TextEditingController();
   final TextEditingController _setsController = TextEditingController();
-  final TextEditingController _restController = TextEditingController();
 
   @override
   State<SingleExercise> createState() => _SingleExerciseState();
@@ -39,6 +38,8 @@ class SingleExercise extends StatefulWidget {
 
 class _SingleExerciseState extends State<SingleExercise> {
   bool? isChecked = false;
+
+  double quantity = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -73,109 +74,169 @@ class _SingleExerciseState extends State<SingleExercise> {
             SlidableAction(
               icon: Icons.settings,
               onPressed: (BuildContext context) {
+                quantity = widget.rest;
                 showDialog(
                   context: context,
-                  builder: (context) => AlertDialog(
-                    backgroundColor: MyTheme().backgroundColor,
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        MyTextField(
-                          hintText: widget.name,
-                          obscureText: false,
-                          prefixIcon: null,
-                          suffixIcon: null,
-                          controller: widget._exerciseController,
+                  builder: (context) => StatefulBuilder(
+                    builder: (context, setState) => AlertDialog(
+                      backgroundColor: MyTheme().backgroundColor,
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          MyTextField(
+                            hintText: widget.name,
+                            obscureText: false,
+                            prefixIcon: null,
+                            suffixIcon: null,
+                            controller: widget._exerciseController,
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          MyTextField(
+                            keyboardType: TextInputType.number,
+                            hintText: '${widget.kg}kg',
+                            obscureText: false,
+                            prefixIcon: null,
+                            suffixIcon: null,
+                            controller: widget._kgController,
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          MyTextField(
+                            keyboardType: TextInputType.number,
+                            hintText: '${widget.sets} sets',
+                            obscureText: false,
+                            prefixIcon: null,
+                            suffixIcon: null,
+                            controller: widget._setsController,
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          MyTextField(
+                            keyboardType: TextInputType.number,
+                            hintText: '${widget.reps} reps',
+                            obscureText: false,
+                            prefixIcon: null,
+                            suffixIcon: null,
+                            controller: widget._repsController,
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 2,
+                                  color: MyTheme().terziaryColor,
+                                ),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      if (quantity > 0) {
+                                        setState(() {
+                                          quantity -= 0.5;
+                                        });
+                                      }
+                                    },
+                                    icon: Icon(
+                                      Icons.remove,
+                                      color: MyTheme().detailsColor,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 5,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: MyTheme().secondaryColor),
+                                    height: 50,
+                                    child: Center(
+                                      child: Text(
+                                        '$quantity mins',
+                                        style: const TextStyle(
+                                            color: Colors.black, fontSize: 18),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        quantity += 0.5;
+                                      });
+                                    },
+                                    icon: Icon(
+                                      Icons.add,
+                                      color: MyTheme().detailsColor,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              quantity = 0;
+                            });
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            'Chiudi',
+                            style: TextStyle(
+                              color: MyTheme().detailsColor,
+                              fontSize: 18,
+                            ),
+                          ),
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        MyTextField(
-                          keyboardType: TextInputType.number,
-                          hintText: '${widget.kg}kg',
-                          obscureText: false,
-                          prefixIcon: null,
-                          suffixIcon: null,
-                          controller: widget._kgController,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        MyTextField(
-                          keyboardType: TextInputType.number,
-                          hintText: '${widget.sets} sets',
-                          obscureText: false,
-                          prefixIcon: null,
-                          suffixIcon: null,
-                          controller: widget._setsController,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        MyTextField(
-                          keyboardType: TextInputType.number,
-                          hintText: '${widget.reps} reps',
-                          obscureText: false,
-                          prefixIcon: null,
-                          suffixIcon: null,
-                          controller: widget._repsController,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        MyTextField(
-                          keyboardType: TextInputType.number,
-                          hintText: widget.rest.toString().endsWith('.0')
-                              ? '${widget.rest.toInt().toString()} mins'
-                              : '${widget.rest.toString()} mins',
-                          obscureText: false,
-                          prefixIcon: null,
-                          suffixIcon: null,
-                          controller: widget._restController,
+                        TextButton(
+                          onPressed: () {
+                            FirestoreHelper().modifyExercise(
+                              widget.user.email.toString(),
+                              widget.workoutName,
+                              widget.name,
+                              widget._exerciseController.text.isEmpty
+                                  ? widget.name
+                                  : widget._exerciseController.text,
+                              widget._kgController.text.isEmpty
+                                  ? widget.kg
+                                  : widget._kgController.text,
+                              widget._setsController.text.isEmpty
+                                  ? widget.sets
+                                  : widget._setsController.text,
+                              widget._repsController.text.isEmpty
+                                  ? widget.reps
+                                  : widget._repsController.text,
+                              quantity,
+                              widget.timestamp,
+                            );
+
+                            widget._exerciseController.clear();
+                            widget._kgController.clear();
+                            widget._setsController.clear();
+                            widget._repsController.clear();
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            'Modifica',
+                            style: TextStyle(
+                                color: MyTheme().detailsColor, fontSize: 18),
+                          ),
                         ),
                       ],
                     ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          'Chiudi',
-                          style: TextStyle(
-                            color: MyTheme().detailsColor,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          FirestoreHelper().modifyExercise(
-                            widget.user.email.toString(),
-                            widget.workoutName,
-                            widget.name,
-                            widget._exerciseController.text,
-                            widget._kgController.text,
-                            widget._setsController.text,
-                            widget._repsController.text,
-                            double.parse(widget._restController.text),
-                            widget.timestamp,
-                          );
-
-                          widget._exerciseController.clear();
-                          widget._kgController.clear();
-                          widget._setsController.clear();
-                          widget._repsController.clear();
-                          widget._restController.clear();
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          'Modifica',
-                          style: TextStyle(
-                              color: MyTheme().detailsColor, fontSize: 18),
-                        ),
-                      ),
-                    ],
                   ),
                 );
               },

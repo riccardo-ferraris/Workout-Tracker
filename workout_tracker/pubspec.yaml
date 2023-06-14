@@ -41,6 +41,7 @@ dependencies:
   flutter_slidable: ^3.0.0
   circular_countdown_timer: ^0.2.3
   flutter_launcher_icons: ^0.13.1
+  quantity_input: ^1.0.2
 
 dev_dependencies:
   flutter_test:
