@@ -83,7 +83,7 @@ class _SingleWorkoutPageState extends State<SingleWorkoutPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     MyTextField(
-                      hintText: 'Nome esercizio',
+                      hintText: 'Exercise Name',
                       obscureText: false,
                       prefixIcon: null,
                       suffixIcon: null,
@@ -105,7 +105,7 @@ class _SingleWorkoutPageState extends State<SingleWorkoutPage> {
                     ),
                     MyTextField(
                       keyboardType: TextInputType.number,
-                      hintText: 'Serie',
+                      hintText: 'Sets',
                       obscureText: false,
                       prefixIcon: null,
                       suffixIcon: null,
@@ -116,7 +116,7 @@ class _SingleWorkoutPageState extends State<SingleWorkoutPage> {
                     ),
                     MyTextField(
                       keyboardType: TextInputType.number,
-                      hintText: 'Ripetizioni',
+                      hintText: 'Reps',
                       obscureText: false,
                       prefixIcon: null,
                       suffixIcon: null,
